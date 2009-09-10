@@ -1,0 +1,33 @@
+# Back end operation information 
+
+#
+# mySQL Settings 
+#
+mysql_user=humansvs_marcus
+mysql_pass=m4rcu5
+mysql_db=humansvs_marcus
+
+#
+# Table names 
+#
+user_table=users
+admin_table=admin
+var_table=variables
+time_table=timezone
+#
+# Web page location settings 
+#
+login_goto=hub.php
+logout_goto=index.php
+admin_login_goto=index.php
+
+#
+# Setup information
+#
+# You can change id_length to a more suitable number if 
+# your game is appropriately large or small. However, 
+# and this is just my personal opinion, if you change it 
+# DURING registration, someone should beat you bloody.  
+#
+reg_admin=C94kfl439j
+id_length=6
