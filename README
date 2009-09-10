@@ -1,0 +1,27 @@
+Karl Vs Zombies version 2.5
+By Karl Tata
+Other Contributions by Alex Marcus, Joe Sklover, and Justin Quick
+
+If you have any problems, please email source@HvZSource.com
+
+What you need:
+Webserver
+MySQL DB
+PHP 5
+We have run it on a LAMP system as well as on Lighttpd on Linux.  It should work on other platforms aswell.
+
+Install:
+Upload files
+Set Permissions (chmod -R pics admin/twitter_conf.txt)
+Set Admin Registration Password (in the file settings/config.dat)
+Set Database Cradentials (in the file settings/config.dat)
+Create Database and Users
+Upload sql file
+
+All configurations (time zone/ twitter/ edit rules / front page/ edit players) take place in the admin section (ex. http://yoursite.com/admin).  
+
+Known Bugs and Issues:
+-Need pagination in player list 
+-If you edit the system generated original zombie character, it sets the character as human?  weird bug...  just don't mess with that user... EVER!
+When an administrator tries to edit a user picture, they get this error: Warning: move_uploaded_file(pics/Max_.jpg) [function.move-uploaded-file]: failed to open stream: No such file or directory in /home5/humansvs/public_html/games/truman/admin/edit_player.php on line 63 Warning: move_uploaded_file() [function.move-uploaded-file]: Unable to move '/var/tmp/phpkjwcc8' to 'pics/Max_.jpg' in /home5/humansvs/public_html/games/truman/admin/edit_player.php on line 63
+-When an administrator tries to change their password: Warning: Wrong parameter count for mysql_fetch_assoc() in /home5/humansvs/public_html/games/goucher/admin/account.php on line 21 
