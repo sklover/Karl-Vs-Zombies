@@ -12,7 +12,7 @@ We have run it on a LAMP system as well as on Lighttpd on Linux.  It should work
 
 Install:
 Upload files
-Set Permissions (chmod -R pics admin/twitter_conf.txt)
+Set Permissions (chmod -R 777 pics admin/twitter_conf.txt)
 Set Admin Registration Password (in the file settings/config.dat)
 Set Database Cradentials (in the file settings/config.dat)
 Create Database and Users
