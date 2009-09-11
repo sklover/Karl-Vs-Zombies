@@ -62,7 +62,7 @@ if($_POST['submit'] == 'Update Table Values') {
 	$extension = basename($_FILES['new_pic']['name']);
 	$sub_ex = explode(".", $extension);
 	$extension = strtolower($sub_ex[sizeof($sub_ex) - 1]);
-	$target_path = "pics/$row[0]_$row[1].$extension";
+	$target_path = "../pics/$row[0]_$row[1].$extension";
 	if(($extension == 'jpg') || ($extension == 'jpeg') || ($extension == 'gif')) {
 		if(move_uploaded_file($_FILES['new_pic']['tmp_name'], $target_path)) {
 			$ret = mysql_query("UPDATE $table_u SET pic_path = '$target_path' WHERE id='$pid';");

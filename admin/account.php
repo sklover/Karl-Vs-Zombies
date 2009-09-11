@@ -18,11 +18,13 @@ $username = $_SESSION['user'];
 <?php
 if($_POST['submit'] == 'Change Password') {
 	$ret = mysql_query("SELECT password FROM $table_u WHERE username='$username';");
-	$pass_ret = mysql_fetch_assoc($ret, 0); 
+	$pass_ret = mysql_fetch_assoc($ret);
+	$pass_ret = $pass_ret['password'];
 	$pass_cur = md5(ereg_replace("[^A-Za-z0-9]","",$_POST['pass_original']));
 	$pass_new = md5(ereg_replace("[^A-Za-z0-9]","",$_POST['pass_new']));
 	$pass_con = md5(ereg_replace("[^A-Za-z0-9]","",$_POST['pass_confirm']));
 	print "<table width=100% height=100%><tr><td align=center valign=center>";
+	
 	if($pass_ret == $pass_cur) {
 		if(strlen($_POST['pass_new']) >= 4 && strlen($_POST['pass_new']) <= 20) {
 			if($pass_new == $pass_con) {
@@ -75,7 +77,6 @@ if($_POST['submit'] == 'Change Password') {
 </html>
 
 <?php
-if(isset($ret)) mysql_free_result($ret);
 mysql_close($sql);
 ob_end_flush();
 ?>
