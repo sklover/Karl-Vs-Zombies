@@ -110,10 +110,15 @@ $row = mysql_fetch_row($ret);
 	<td><select name='state'>
 		<?php
 			$st_sel = array('-2' => 'Orig. Zombie', '-1' => 'Zombie', '0' => 'Deceased', '1' => 'Resistance');
-			while(list($k,$v) = each($st_sel)) {
-				print "<option value='$k'";
-				if($row[3] == $k) print " selected";
-				print ">$v</option>";
+			
+			if($row[3] == '-3') {
+				print "<option value='-3'>Zombie</option>";
+			} else {
+				while(list($k,$v) = each($st_sel)) {
+					print "<option value='$k'";
+					if($row[3] == $k) print " selected";
+					print ">$v</option>";
+				}
 			}
 		?>
 	</select></td>

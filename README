@@ -20,6 +20,3 @@ Upload sql file
 
 All configurations (time zone/ twitter/ edit rules / front page/ edit players) take place in the admin section (ex. http://yoursite.com/admin).  
 
-Known Bugs and Issues:
--Need pagination in player list 
--If you edit the system generated original zombie character, it sets the character as human?  weird bug...  just don't mess with that user... EVER!
