@@ -373,10 +373,9 @@ for($i = 0; $i < mysql_num_rows($ret); $i++) {
   </tr>
 </table>
            <center><img src="http://media.goucherzombies.com/hvzsource/Maverick.gif" alt="" width="200" height="125" /><br>
-            <p align="center" class="style8 style2">HVZ Source code ©2008 and Justin Quick.<br />
-              Web design and logo ©2008 Max Temkin.<br />
-              &quot;Humans vs. Zombies&quot; rules, logo ©2008 Chris Weed.</p>
-              <p align="center" class="style8 style2"> HVZ SOURCE is a project created by Chris Weed (Paladin), <br>Joe Sklover (Ranger), Justin Quick (Sourcerer), Trevor Moorman (Rogue), <br>and Max Temkin (Wizard).</p></th>
+            <p align="center" class="style8 style2">KarlVsZombies game code by Karl Tata.<br />
+              &quot;Humans vs. Zombies&quot; rules, logo &copy;2009 Gnarwhal Studios.</p>
+              <p align="center" class="style8 style2"> HVZ SOURCE is a project created by Chris Weed (Paladin), <br>Brad Sappington (bard), Joe Sklover (Ranger), Justin Quick (Sourcerer),<br> Trevor Moorman (Rogue), and Max Temkin (Wizard).</p></th>
 
 </body>
 </html>
