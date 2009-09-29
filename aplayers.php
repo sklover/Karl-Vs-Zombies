@@ -200,8 +200,8 @@ if($ret && ($rows = mysql_num_rows($ret)) > 0)
 			print "</td>";
 		}
 		
-		if($admin) print "<td align='center'><a href='admin/edit_player.php?id=$row[9]'>edit</a></td>";
-		if($admin) print "<td align='center'><a href='admin/delete_player.php?id=$row[9]'>delete</a></td>";
+		if($admin) print "<td align='center'><a href='admin/edit_player.php?id=".$row['id']."'>edit</a></td>";
+		if($admin) print "<td align='center'><a href='admin/delete_player.php?id=".$row['id']."'>delete</a></td>";
 		print "</tr>";
 	}
 } else {
