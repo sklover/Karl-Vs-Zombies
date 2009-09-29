@@ -6,8 +6,8 @@ require_once('../functions/load_config.php');
 require_once('../functions/quick_con.php');
 $config = load_config('../settings/config.dat');
 $sql = my_quick_con($config) or die("MySQL problem");
-$result = mysql_query("SELECT front FROM content");
-
+$result = mysql_query("SELECT value AS front FROM content WHERE keyword = 'front'");
+$row = mysql_fetch_assoc($result);
 ?>
 
 <html>
@@ -26,11 +26,7 @@ oFCKeditor.ReplaceTextarea() ;
 <form action="insertfront.php" method="post">
 <p>
 	<textarea id="front" name="front" style="width:700px;height:500px;">
-		<?php while($row = mysql_fetch_array($result))
- 		{
-  		echo $row[0];
-  		}
-		?>
+		<?php print $row['front']; ?>
 	</textarea>
 </p>
 <p><input name="save" type="submit" value="save"></p>

@@ -6,8 +6,8 @@ require_once('../functions/load_config.php');
 require_once('../functions/quick_con.php');
 $config = load_config('../settings/config.dat');
 $sql = my_quick_con($config) or die("MySQL problem");
-$result = mysql_query("SELECT rules FROM content");
-
+$result = mysql_query("SELECT value AS rules FROM content WHERE keyword = 'rules'");
+$row = mysql_fetch_assoc($result);
 ?>
 
 <html>
@@ -28,11 +28,7 @@ oFCKeditor.ReplaceTextarea() ;
 <form action="insert.php" method="post">
 <p>
 	<textarea id="rules" name="rules" style="width:700px;height:500px;">
-		<?php while($row = mysql_fetch_array($result))
- 		{
-  		echo $row[0];
-  		}
-		?>
+		<?php print $row['rules']; ?>
 	</textarea>
 </p>
 <p><input name="save" type="submit" value="save"></p>
