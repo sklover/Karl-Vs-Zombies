@@ -38,7 +38,7 @@ elseif($step == 'game-over'){
 	$message = "Humans Vs. Zombies is over!  Thanks for playing!";
 }
 else {
-	$ret = mysql_query("UPDATE $table_v SET value=1 WHERE zkey='$step';");
+	$ret = mysql_query("UPDATE $table_v SET value=1 WHERE keyword='$step';");
 	if($step == 'game-started') {
 		$ret = mysql_query("UPDATE $table_u SET feed = now() WHERE state = -3;");
 		$ret = mysql_query("UPDATE $table_u SET killed = now() WHERE state = -3;");
@@ -72,7 +72,8 @@ include("../twitter.php");
 <td valign=top>
 <?php
 if($box == 0) {
-	$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='reg-open';");
+	$query = "SELECT value FROM $table_v WHERE keyword = 'reg-open';";
+	$ret = mysql_query($query);
 	$val = mysql_fetch_assoc($ret);
 	$val = $val['value'];
 	if($val == 0) {
@@ -92,7 +93,7 @@ Do you want to open registeration?<br>
 <td valign=top>
 <?php
 if($box == 0) {
-	$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='reg-closed';");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='reg-closed';");
 	$val = mysql_fetch_assoc($ret);
 	$val = $val['value'];
 	if($val == 0) {
@@ -112,7 +113,7 @@ Ahh we have enough users! Close regisration!<br>
 <td valign=top>
 <?php
 if($box == 0) {
-	$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='oz-selected';");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-selected';");
 	$val = mysql_fetch_assoc($ret);
 	$val = $val['value'];
 	if($val == 0) {
@@ -132,7 +133,7 @@ Who is it going to be?<br>
 <td valign=top>
 <?php
 if($box == 0) {
-	$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='game-started';");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='game-started';");
 	$val = mysql_fetch_assoc($ret);
 	$val = $val['value'];
 	if($val == 0) {
@@ -152,7 +153,7 @@ The game's afoot!<br>
 <td valign=top>
 <?php
 if($box == 0) {
-	$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='oz-revealed';");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
 	$val = mysql_fetch_assoc($ret);
 	$val = $val['value'];
 	if($val == 0) {
@@ -172,7 +173,7 @@ Look everyone already knows, make it official!<br>
 <td valign=top>
 <?php
 if($box == 0) {
-	$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='game-over';");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='game-over';");
 	$val = mysql_fetch_assoc($ret);
 	$val = $val['value'];
 	if($val == 0) {

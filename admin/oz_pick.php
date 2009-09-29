@@ -29,7 +29,7 @@ $ret = mysql_query("INSERT INTO $table_u (id, fname, lname, state, kills) VALUES
 
 
 // variables table
-$ret = mysql_query("UPDATE $table_v SET value = 1 WHERE zkey='oz-selected';");
+$ret = mysql_query("UPDATE $table_v SET value = 1 WHERE keyword='oz-selected';");
 
 
 $ret = mysql_query("SELECT fname, lname FROM users WHERE id='$oz';");
@@ -40,7 +40,7 @@ print "<a href='flow.php'>Back to game flow</a>";
 print "</td></tr></table>";
 	
 } else {
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='reg-closed';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='reg-closed';");
 $reg_closed = mysql_fetch_assoc($ret);
 $reg_closed = $reg_closed['value'];
 if($reg_closed == 0) {

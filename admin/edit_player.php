@@ -19,6 +19,30 @@ $pid = $_GET['id'];
 <html>
 <head>
 <link rel='stylesheet' type='text/css' href='style/main.css'>
+
+<script type="text/javascript">
+function setTimeNow(fieldname) {
+	var f = document.editPlayerForm;
+	
+	var today = new Date();
+	
+	var year = today.getFullYear();
+	var mon = (today.getMonth() + 1);
+	mon = (mon < 10) ? "0" + mon : mon;
+	var day = today.getDate();
+	day = (day < 10) ? "0" + day : day;
+	
+	var hour = today.getHours();
+	hour = (hour < 10) ? "0" + hour : hour;
+	var mins = today.getMinutes();
+	mins = (mins < 10) ? "0" + mins : mins;
+	var secs = today.getSeconds();
+	secs = (secs < 10) ? "0" + secs : secs;
+	
+	eval("f." + fieldname + ".value = '" + year + "-" + mon + "-" + day + " " + hour + ":" + mins + ":" + secs + "'");
+}
+</script>
+
 </head>
 <?php
 if($_POST['submit'] == 'Update Table Values') {
@@ -31,12 +55,10 @@ if($_POST['submit'] == 'Update Table Values') {
 	$n_killed = $_POST['killed'];
 	$n_feed = $_POST['feed'];
 	$n_starved = $_POST['starved'];
-	$ret = mysql_query("UPDATE $table_u SET fname = '$n_fname' WHERE id='$pid';"); 
-	$ret = mysql_query("UPDATE $table_u SET lname = '$n_lname' WHERE id='$pid';");
-	$ret = mysql_query("UPDATE $table_u SET email = '$n_email' WHERE id='$pid';");
-	$ret = mysql_query("UPDATE $table_u SET state = $n_state WHERE id='$pid';");
-	$ret = mysql_query("UPDATE $table_u SET killed_by = '$n_killed_by' WHERE id='$pid';");
-	$ret = mysql_query("UPDATE $table_u SET kills = $n_kills WHERE id='$pid';");
+	
+	$query = "UPDATE $table_u SET fname = '$n_fname', lname = '$n_lname', email = '$n_email', state = $n_state, killed_by = '$n_killed_by', kills = $n_kills WHERE id = '$pid'";
+	$ret = mysql_query($query);
+	
 	if(strlen($n_killed) > 0) 	$ret = mysql_query("UPDATE $table_u SET killed = TIMESTAMP '$n_killed' WHERE id='$pid';");
 	if(strlen($n_feed) > 0) 	$ret = mysql_query("UPDATE $table_u SET feed = TIMESTAMP '$n_feed' WHERE id='$pid';");
 	if(strlen($n_starved) > 0) 	$ret = mysql_query("UPDATE $table_u SET starved = TIMESTAMP '$n_starved' WHERE id='$pid';");
@@ -87,7 +109,7 @@ $row = mysql_fetch_row($ret);
 
 <tr><td width=50% valign=top>
 
-<form method=POST action=<?php echo $PHP_SELF; ?>>
+<form name="editPlayerForm" method="POST" action="<?php echo $PHP_SELF; ?>">
 <table>
 <tr>
 	<td>username:</td>
@@ -124,13 +146,15 @@ $row = mysql_fetch_row($ret);
 	</select></td>
 </tr>
 <?php
-	$rest = array(	'4' => 'killed_by', 
-			'5' => 'kills',
-			'6' => 'killed',
-			'7' => 'feed',
-			'8' => 'starved');
+	$rest = array(
+		'4' => 'killed_by', 
+		'5' => 'kills',
+		'6' => 'killed',
+		'7' => 'feed',
+		'8' => 'starved');
 	while(list($k,$v) = each($rest)) {
-		print "<tr><td>$v:</td><td><input type='text' name='$v' size=20 value='$row[$k]'></td></tr>";
+		$add_time_button = ($k == 6 || $k == 7 || $k == 8) ? '&nbsp;<input type="button" onclick="setTimeNow(\''.$v.'\');" value="now" />' : "";
+		print "<tr><td>$v:</td><td><input type='text' name='$v' size='20' value='$row[$k]' />".$add_time_button."</td></tr>\n";
 	}
 ?>
 <tr><td colspan=2 align=center><input type='submit' name='submit' value='Update Table Values'></td></tr>
@@ -143,14 +167,14 @@ eg. 2007-04-11 21:07:49<br>
 
 </td><td valign=top>
 
-<center><form method=POST action=<?php echo $PHP_SELF; ?>><table>
+<center><form name="changePasswordForm" method=POST action="<?php echo $PHP_SELF; ?>"><table>
 <tr><td>new password:</td><td><input type='password' name='pass1' size=20 maxlength=20></td></tr>
 <tr><td>retype password:</td><td><input type='password' name='pass2' size=20 maxlength=20></td></tr>
 <tr><td colspan=2 align=center><input type='submit' name='submit' value='Change Password'></td></tr>
 </table></form>
 <hr>
 <img src='<?php echo $row[9]; ?>' height=200 alt='no image available'></img><p>
-<form method=POST enctype='multipart/form-data' action=<?php echo $PHP_SELF; ?>>
+<form name="editPictureForm" method=POST enctype='multipart/form-data' action="<?php echo $PHP_SELF; ?>">
 <input type='hidden' name='MAX_FILE_SIZE' value='1000000'>
 new picture: <input type='file' size=30 name='new_pic'><br>
 <center><input type='submit' name='submit' value='Upload'></center>

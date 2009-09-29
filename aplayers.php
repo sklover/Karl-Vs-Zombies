@@ -8,18 +8,34 @@ $config = load_config('settings/config.dat');
 $table_u = $config['user_table'];
 $table_v = $config['var_table'];
 $table_t = $config['time_table'];
-$sql = my_quick_con($config) or die("MySQL problem"); 
+$sql = my_quick_con($config) or die("MySQL problem");
+
 // Set default time zone
 $ret = mysql_query("SELECT zone FROM $table_t");
-while($row = mysql_fetch_array($ret))
-	   date_default_timezone_set($row['zone']);
-$ret = mysql_query("UPDATE $table_u SET state = -4 WHERE now() > feed + INTERVAL 2 day;"); 
-$ret = mysql_query("UPDATE $table_u SET starved = feed + INTERVAL 2 day WHERE state = -4;");
-$ret = mysql_query("UPDATE $table_u SET state = 0 WHERE state = -4;");
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='oz-revealed';");
-$reveal_oz = mysql_fetch_assoc($ret);
-$reveal_oz = $reveal_oz['value'];
+while($row = mysql_fetch_array($ret)) {
+	date_default_timezone_set($row['zone']);
+}
+
+
+// update the starvation times and oz reveal (every 5 minutes, not on every page refresh)
+$now = time();
+$last_starvation_update = (isset($_SESSION['last_starvation_update'])) ? $_SESSION['last_starvation_update'] : $now;
+if($last_starvation_update >= $now + 900) {
+	$ret = mysql_query("UPDATE $table_u SET state = -4 WHERE now() > feed + INTERVAL 2 day;"); 
+	$ret = mysql_query("UPDATE $table_u SET starved = feed + INTERVAL 2 day WHERE state = -4;");
+	$ret = mysql_query("UPDATE $table_u SET state = 0 WHERE state = -4;");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
+	$reveal_oz = mysql_fetch_assoc($ret);
+	$reveal_oz = $reveal_oz['value'];
+	
+	$_SESSION['last_starvation_update'] = time();
+	$_SESSION['oz_revealed'] = $reveal_oz;	
+} else {
+	$reveal_oz = (isset($_SESSION['oz_revealed'])) ? $_SESSION['oz_revealed'] : 0;
+}
+
 $state_translate = array('-3'=>'horde', '-2'=>'horde (original)', '-1'=>'horde', '0'=>'deceased', '1'=>'resistance', '2'=>'resistance');
+
 $admin = 0;
 if(isset($_SESSION['pass_hash'])) $admin = 1;
 
@@ -60,12 +76,15 @@ if($_POST['submit'] == 'Refresh') {
 <html>
 <head>
 <link rel='stylesheet' type='text/css' href='style/main.css'>
+<link rel='stylesheet' type='text/css' href='style/styles.css'>
+<link rel='stylesheet' type='text/css' href='style/admin.css'>
 </head>
 
 <body>
 <h3>Player List</h3>
-<form method=POST action=<?php echo $PHP_SELF; ?>>
+<form name="playerListForm" method="POST" action="<?php echo $PHP_SELF; ?>">
 <center>
+
 <?php
 $faction_array = array('a'=>'All', 'r'=>'Resistance', 'h'=>'Horde', 'd'=>'Deceased');
 $sort_by_array = array('ln'=>'Last Name', 'fn'=>'First Name', 'ks'=>'Kills', 'kd'=>'Time Killed', 'fd'=>'Last Feeding', 'sd'=>'Time Starved');
@@ -89,8 +108,8 @@ while(list($k,$v) = each($order_array)) {
 	print ">$v</option>";
 }
 print "</select>";
-
 ?>
+
 <input type='submit' name='submit' value='Refresh'><br>
 <input type='checkbox' name='show_pics' value='1' <?php if($show_pics) print "checked"; ?>> Pictures
 <input type='checkbox' name='show_kills' value='1' <?php if($show_kills) print "checked"; ?>> Kills
@@ -98,76 +117,95 @@ print "</select>";
 <input type='checkbox' name='show_feed' value='1' <?php if($show_feed) print "checked"; ?>> Last Fed
 <input type='checkbox' name='show_starved' value='1' <?php if($show_starved) print "checked"; ?>> Time Starved
 </center>
-<table width=100% border>
+
+<br />
+<table width="90%" cellspacing="0" class="data-table" align="center">
 <tr>
 <?php
-if($show_pics) print "<td>Picture</td>";
+if($show_pics) print "<th>Picture</th>";
 ?>
-<td>Name</td>
-<td>Team</td>
+<th>Name</th>
+<th>Team</th>
 <?php
-if($show_kills) print "<td>Kills</td>";
-if($show_killed) print "<td>Time of Death</td>";
-if($show_feed) print "<td>Last Fed</td>";
-if($show_starved) print "<td>Starvation Time</td>";
-if($admin) print "<td></td>";
+if($show_kills) print "<th>Kills</th>";
+if($show_killed) print "<th>Time of Death</th>";
+if($show_feed) print "<th>Last Fed</th>";
+if($show_starved) print "<th>Starvation Time</th>";
+if($admin) print "<th>Edit</th>";
+if($admin) print "<th>Delete</th>";
 ?>
 </tr>
 
 <?php
-$ret = mysql_query("SELECT fname, lname, state, killed_by, killed, feed, kills, starved, pic_path, id FROM $table_u WHERE $faction ORDER BY $sort_by $order;"); 
-for($i = 0; $i < mysql_num_rows($ret); $i++) {
-	
-	$row = mysql_fetch_array($ret);
-	if($show_pics) {
-		print "<td>";
-		if(strlen($row[8]) > 0) {
-			print "<center><img src='$row[8]' height=200></center>";
+$ret = mysql_query("SELECT fname, lname, state, killed_by, killed, feed, kills, starved, pic_path, id FROM $table_u WHERE $faction ORDER BY $sort_by $order;");
+if($ret && ($rows = mysql_num_rows($ret)) > 0)
+{
+	for($i = 0; $i < $rows; $i++) {
+		$row_id = ($i % 2) + 1;
+		print '<tr class="row'.$row_id.'">';
+		
+		$row = mysql_fetch_assoc($ret);
+ 	
+		if($show_pics) {
+			print '<td align="center">';
+			if(strlen($row['pic_path']) > 0) {
+				print '<img src="'.$row['pic_path'].'" class="player-pic '.$state_translate[$row['state']].'-pic">';
+			} else {
+				print "no image<br>available";
+			}
+			print "</td>";
+		}
+		
+		print '<td align="center">'.$row['fname'].' '.$row['lname'].'</td>';
+		
+		print '<td align="center">';
+		if($row['state'] == -2 && !$reveal_oz) {
+			print '<span class="resistance">resistance</span>';
 		} else {
-			print "<center>no image<br>available</center>";
+			print '<span class="'.$state_translate[$row['state']].'">'.$state_translate[$row['state']].'</span>';
 		}
 		print "</td>";
-	}
-	print "<td>$row[0] $row[1]</td><td>";
-	if($row[2] == -2 && !$reveal_oz) {
-		print "resistance";
-	} else {
-		print $state_translate[$row[2]];
-	}
-	if($show_kills) {
-		print "<td>";
-		if($row[2] == -2 && !$reveal_oz) {
-			print "0";
-		} else {
-			print "$row[6]";
+		
+		if($show_kills) {
+			print '<td align="center">';
+			if($row['state'] == -2 && !$reveal_oz) {
+				print "0";
+			} else {
+				print $row['kills'];
+			}
+			print "</td>";
 		}
-		print "</td>";
-	}
-	if($show_killed) {
-		print "<td>";
-		if($row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) {
-			print $row[4];
+		
+		if($show_killed) {
+			print '<td align="center">';
+			if($row['state'] <= 0 && ($row['state'] != -2 || $reveal_oz)) {
+				print $row['killed'];
+			}
+			print "</td>";
 		}
-		print "</td>";
+		
+		if($show_feed) {
+			print '<td align="center">';
+			if($row['state'] <= 0 && ($row['state'] != -2 || $reveal_oz)) { 
+				print $row['feed'];
+			}
+			print "</td>";
+		}
+		
+		if($show_starved) {
+			print '<td align="center">';
+			if($row['state'] == 0) { 
+				print $row['starved'];
+			}
+			print "</td>";
+		}
+		
+		if($admin) print "<td align='center'><a href='admin/edit_player.php?id=$row[9]'>edit</a></td>";
+		if($admin) print "<td align='center'><a href='admin/delete_player.php?id=$row[9]'>delete</a></td>";
+		print "</tr>";
 	}
-	if($show_feed) {
-		print "<td>";
-		if($row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) { 
-                        print $row[5];
-                }
-		print "</td>";
-	}
-	if($show_starved) {
-		print "<td>";
-		if($row[2] == 0) { 
-                        print $row[7];
-                }
-		print "</td>";
-	}
-	if($admin) print "<td align=center><a href='admin/edit_player.php?id=$row[9]'>edit</a></td>";
-        if($admin) print "<td align=center><a href='admin/delete_player.php?id=$row[9]'>delete</a></td>";
-	print "</tr>";
-
+} else {
+	print '<tr><td colspan="7" align="center"> There are no records to display</td></tr>';
 }
 ?>
 

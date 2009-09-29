@@ -11,7 +11,7 @@ $sql = my_quick_con($config) or die("MySQL problem");
 $ret = mysql_query("UPDATE $table_u SET state = -4 WHERE now() > feed + INTERVAL 2 day;"); 
 $ret = mysql_query("UPDATE $table_u SET starved = feed + INTERVAL 2 day WHERE state = -4;");
 $ret = mysql_query("UPDATE $table_u SET state = 0 WHERE state = -4;");
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='oz-revealed';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
 $reveal_oz = mysql_fetch_assoc($ret);
 $reveal_oz = $reveal_oz['value'];
 $state_translate = array('-3'=>'horde', '-2'=>'horde (original)', '-1'=>'horde', '0'=>'deceased', '1'=>'resistance', '2'=>'resistance');

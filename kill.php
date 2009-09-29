@@ -16,7 +16,7 @@ while($row = mysql_fetch_array($ret))
 $ret = mysql_query("UPDATE $table_u SET state = -4 WHERE now() > feed + INTERVAL 2 day;");
 $ret = mysql_query("UPDATE $table_u SET starved = feed + INTERVAL 2 day WHERE state = -4;");
 $ret = mysql_query("UPDATE $table_u SET state = 0 WHERE state = -4;");
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='oz-revealed';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
 // this is an array fetching bug 
 // $reveal_oz = mysql_fetch_assoc($ret);
 // $reveal_oz is clearly expecting a scalar return value and not an array
@@ -62,7 +62,7 @@ a:visited {
 </style></head>
 
 <?php
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='game-started';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='game-started';");
 $game_started = mysql_fetch_assoc($ret); 
 $game_started = $game_started['value'];
 if($game_started == 0) {
@@ -70,7 +70,7 @@ if($game_started == 0) {
 	mysql_close($sql); 
 	header("location:game_no_start.php");
 }
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='game-over';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='game-over';");
 $game_over = mysql_fetch_assoc($ret);
 $game_over = $game_over['ret'];
 if($game_over == 1) {
@@ -89,7 +89,7 @@ $hour = ereg_replace("[^0-9]","",$_POST['hour']);
 $minute = ereg_replace("[^0-9]","",$_POST['minute']);
 $today = ereg_replace("[^0-1]","",$_POST['day']);
 $err = 0; 
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='oz-revealed';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
 $revealed = mysql_fetch_assoc($ret);
 $revealed = $revealed['value'];
 

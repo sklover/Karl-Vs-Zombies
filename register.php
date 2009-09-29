@@ -6,7 +6,7 @@ $config = load_config('settings/config.dat');
 $id = $_SESSION['id'];
 $sql = my_quick_con($config) or die("MySQL problem"); 
 $table_v = $config['var_table']; 
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='reg-open';"); 
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='reg-open';"); 
 
 $open = mysql_fetch_assoc($ret);
 $open = $open['value'];
@@ -17,7 +17,7 @@ if($open == 0) {
 	header("Location:reg_closed.php");
 }
 
-$ret = mysql_query("SELECT value FROM $table_v WHERE zkey='reg-closed';");
+$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='reg-closed';");
 $closed = mysql_fetch_assoc($ret); 
 $closed = $closed['value'];
 if($closed == 1) {
