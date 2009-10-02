@@ -18,14 +18,14 @@ $pid = $_GET['id'];
 </head>
 <?php
 if($_POST['submit'] == 'Delete') {
-	$ret = mysql_query("SELECT fname, lname, username FROM users WHERE id='$pid';");
+	$ret = mysql_query("SELECT fname, lname, username FROM $table_u WHERE id='$pid';");
 	while($row = mysql_fetch_array($ret)) {	
 		echo("Sucessfully deleted player " . $row['fname'] . " " . $row['lname'] . ".");
 	}
-	mysql_query("DELETE FROM users WHERE id = '$pid';");
+	mysql_query("DELETE FROM $table_u WHERE id = '$pid';");
 }
 else {
-       $ret = mysql_query("SELECT fname, lname, username FROM users WHERE id='$pid';");
+       $ret = mysql_query("SELECT fname, lname, username FROM $table_u WHERE id='$pid';");
 while($row = mysql_fetch_array($ret))
 {
 	echo("Are you sure you want to delete player " . $row['fname'] . " " . $row['lname'] . "?<br />");

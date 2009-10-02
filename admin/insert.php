@@ -6,7 +6,7 @@ require_once('../functions/load_config.php');
 require_once('../functions/quick_con.php');
 $config = load_config('../settings/config.dat');
 $sql = my_quick_con($config) or die("MySQL problem");
-$con="UPDATE content SET rules ='$_POST[rules]'";
+$con="UPDATE $config[content_table] SET value ='$_POST[rules]' WHERE keyword='rules';";
 
 if (!mysql_query($con,$sql))
   {

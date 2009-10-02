@@ -6,7 +6,7 @@ require_once('../functions/load_config.php');
 require_once('../functions/quick_con.php');
 $config = load_config('../settings/config.dat');
 $sql = my_quick_con($config) or die("MySQL problem");
-$con="UPDATE content SET front ='$_POST[front]'";
+$con="UPDATE $config[content_table] SET value ='$_POST[front]' WHERE keyword='front';";
 
 if (!mysql_query($con,$sql))
   {

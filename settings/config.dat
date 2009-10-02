@@ -3,23 +3,26 @@
 #
 # mySQL Settings 
 #
-mysql_user=YourUsername
-mysql_pass=YourPasswod
-mysql_db=YourDB
+mysql_user = YourUsername
+mysql_pass = YourPasswod
+mysql_db = YourDB
+mysql_db_host = localhost
 
 #
 # Table names 
 #
-user_table=users
-admin_table=admin
-var_table=variables
-time_table=timezone
+table_prefix = YourGame
+user_table = users
+admin_table = admin
+var_table = variables
+time_table = timezone
+content_table = content
 #
 # Web page location settings 
 #
-login_goto=hub.php
-logout_goto=index.php
-admin_login_goto=index.php
+login_goto = hub.php
+logout_goto = index.php
+admin_login_goto = index.php
 
 #
 # Setup information
@@ -29,5 +32,5 @@ admin_login_goto=index.php
 # and this is just my personal opinion, if you change it 
 # DURING registration, someone should beat you bloody.  
 #
-reg_admin=YourAdminRegistrationPassword
-id_length=6
+reg_admin = YourAdminRegistrationPassword
+id_length = 6

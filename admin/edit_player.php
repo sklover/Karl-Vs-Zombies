@@ -97,7 +97,7 @@ if($_POST['submit'] == 'Update Table Values') {
 	}
 	print "</td></tr></table></body>";
 } else {
-$ret = mysql_query("SELECT fname, lname, email, state, killed_by, kills, killed, feed, starved, pic_path, username FROM users WHERE id='$pid';");
+$ret = mysql_query("SELECT fname, lname, email, state, killed_by, kills, killed, feed, starved, pic_path, username FROM $table_u WHERE id='$pid';");
 $row = mysql_fetch_row($ret);
 ?>
 <body>

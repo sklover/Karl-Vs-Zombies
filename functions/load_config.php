@@ -11,6 +11,12 @@ function load_config($config_file_name) {
 		}
 	}
 	fclose($config_file_stream);
+	foreach ($config as $key => $value) {
+		$pre = explode("_", $key);
+		if($pre[1] == 'table') {
+			$config[$key] = $config['table_prefix'] . $value;
+		}
+	}
 	return $config;
 }
 ?>

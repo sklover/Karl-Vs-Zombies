@@ -32,7 +32,7 @@ $ret = mysql_query("INSERT INTO $table_u (id, fname, lname, state, kills) VALUES
 $ret = mysql_query("UPDATE $table_v SET value = 1 WHERE keyword='oz-selected';");
 
 
-$ret = mysql_query("SELECT fname, lname FROM users WHERE id='$oz';");
+$ret = mysql_query("SELECT fname, lname FROM $table_u WHERE id='$oz';");
 $row = mysql_fetch_row($ret);
 print "<table height=100% width=100%><tr><td align=center valign=center>";
 print "$row[0] $row[1] has been selected as the original zombie.<br>"; 

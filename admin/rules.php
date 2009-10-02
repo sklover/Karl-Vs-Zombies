@@ -6,7 +6,7 @@ require_once('../functions/load_config.php');
 require_once('../functions/quick_con.php');
 $config = load_config('../settings/config.dat');
 $sql = my_quick_con($config) or die("MySQL problem");
-$result = mysql_query("SELECT value AS rules FROM content WHERE keyword = 'rules'");
+$result = mysql_query("SELECT value AS rules FROM $config[content_table] WHERE keyword = 'rules'");
 $row = mysql_fetch_assoc($result);
 ?>
 

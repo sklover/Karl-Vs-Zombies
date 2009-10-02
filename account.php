@@ -156,7 +156,7 @@ if($_POST['submit'] == 'Change Password') {
 	if($pass_ret == $pass_cur) {
 		if(strlen($_POST['pass_new']) >= 4 && strlen($_POST['pass_new']) <= 20) {
 			if($pass_new == $pass_con) {
-				$ret = mysql_query("UPDATE users SET password = '$pass_new' WHERE id='$id';");
+				$ret = mysql_query("UPDATE $table_u SET password = '$pass_new' WHERE id='$id';");
 				print "Password successfully changed.<br>";
 				print "<a href='account.php'>Back</a>";
 			} else {
