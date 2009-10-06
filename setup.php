@@ -1,7 +1,4 @@
 <?php
-ob_start();
-session_start();
-require_once('./security.php');
 require_once('./functions/load_config.php');
 $config = load_config('./settings/config.dat');
 
@@ -14,11 +11,11 @@ $sql .= "CREATE TABLE IF NOT EXISTS `$config[admin_table]` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ";
 
-$sql .= "CREATE TABLE IF NOT EXISTS `$config[timezone_table]` (
+$sql .= "CREATE TABLE IF NOT EXISTS `$config[time_table]` (
   `zone` tinytext NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `$config[timezone_table]` (`zone`) VALUES
+INSERT INTO `$config[time_table]` (`zone`) VALUES
 ('US/Eastern');
 ";
 
@@ -41,12 +38,12 @@ $sql .+ "CREATE TABLE IF NOT EXISTS `$config[user_table]` (
 ";
 
 
-$sql .= "CREATE TABLE IF NOT EXISTS `$config[variable_table]` (
+$sql .= "CREATE TABLE IF NOT EXISTS `$config[var_table]` (
   `zkey` varchar(255) NOT NULL,
   `value` mediumint(9) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `$config[variable_table]` (`zkey`, `value`) VALUES
+INSERT INTO `$config[var_table]` (`zkey`, `value`) VALUES
 ('oz-selected', 0),
 ('game-started', 0),
 ('oz-revealed', 0),

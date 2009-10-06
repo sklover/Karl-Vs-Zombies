@@ -14,7 +14,7 @@ function load_config($config_file_name) {
 	foreach ($config as $key => $value) {
 		$pre = explode("_", $key);
 		if($pre[1] == 'table') {
-			$config[$key] = $config['table_prefix'] . $value;
+			$config[$key] = $config['table_prefix'] . '_' . $value;
 		}
 	}
 	return $config;
