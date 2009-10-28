@@ -5,7 +5,7 @@ require_once('functions/load_config.php');
 require_once('functions/quick_con.php');
 $config = load_config('settings/config.dat');
 $sql = my_quick_con($config) or die("MySQL problem");
-$result = mysql_query("SELECT front FROM $config[content_table]");
+$result = mysql_query("SELECT value FROM $config[content_table] WHERE keyword='front'");
 
 ?>
 

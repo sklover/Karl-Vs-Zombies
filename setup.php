@@ -19,7 +19,7 @@ INSERT INTO `$config[time_table]` (`zone`) VALUES
 ('US/Eastern');
 ";
 
-$sql .+ "CREATE TABLE IF NOT EXISTS `$config[user_table]` (
+$sql .= "CREATE TABLE IF NOT EXISTS `$config[user_table]` (
   `id` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
