@@ -8,6 +8,7 @@ require_once('functions/quick_con.php');
 $config = load_config('settings/config.dat'); 
 $sql = my_quick_con($config) or die("SQL problem"); 
 $table_u = $config['user_table'];
+$game_name = $config['game_name'];
 $id = $_SESSION['id'];
 $ret = mysql_query("SELECT pic_path FROM $table_u WHERE id='$id';"); 
 $c_pic_path = mysql_fetch_assoc($ret);
@@ -178,7 +179,7 @@ if($_POST['submit'] == 'Change Password') {
 	$extension = basename($_FILES['new_pic']['name']);
 	$sub_ex = explode(".", $extension); 
 	$extension = strtolower($sub_ex[sizeof($sub_ex) - 1]);
-	$target_path = "pics/$row[0]_$row[1].$extension";
+	$target_path = "/pics/$game_name/$row[0]_$row[1].$extension";
 	print "<table width=100% height=100%><tr><td align=center valign=center>";
 	if(($extension == 'jpg') || ($extension == 'jpeg') || ($extension == 'gif')) {
 		if(move_uploaded_file($_FILES['new_pic']['tmp_name'], $target_path)) {

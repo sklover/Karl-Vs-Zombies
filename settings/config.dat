@@ -11,7 +11,6 @@ mysql_db_host = localhost
 #
 # Table names 
 #
-table_prefix = YourGame
 user_table = users
 admin_table = admin
 var_table = variables

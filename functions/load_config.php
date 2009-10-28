@@ -11,10 +11,14 @@ function load_config($config_file_name) {
 		}
 	}
 	fclose($config_file_stream);
+	
+	$a = explode('.', $_SERVER["HTTP_HOST"]);
+	$config['game_name'] = $a[0];
+	
 	foreach ($config as $key => $value) {
 		$pre = explode("_", $key);
 		if($pre[1] == 'table') {
-			$config[$key] = $config['table_prefix'] . '_' . $value;
+			$config[$key] = $config['game_name'] . '_' . $value;
 		}
 	}
 	return $config;
