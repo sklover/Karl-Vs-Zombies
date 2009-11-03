@@ -165,7 +165,7 @@ $lname = ereg_replace("[^A-Za-z0-9]","",$_POST['lastname']);
 $username = ereg_replace("[^A-Za-z0-9]","",$_POST['username']);
 $password1 = ereg_replace("[^A-Za-z0-9]","",$_POST['password1']);
 $password2 = ereg_replace("[^A-Za-z0-9]","",$_POST['password2']); 
-$email_address = ereg_replace("[^A-Za-z0-9@.]","",$_POST['email_address']);
+$email_address = ereg_replace("[^A-Za-z0-9@_.-]","",$_POST['email_address']);
 
 if($_POST['oz_opt'] == 'oz') {
 	$oz_opt = 1; 
@@ -178,9 +178,11 @@ $err = 1;
 print "Your first name is too long. Get a new one."; 
 }
 if(strlen($lname) > 30) {
+$err = 1; 
 print "Your last name is too long. Get a new one.";
 }
 if(strlen($username) < 4) {
+$err = 1; 
 print "Username is too short.<br>";
 }
 if(strlen($username) > 20) {

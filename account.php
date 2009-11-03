@@ -179,11 +179,11 @@ if($_POST['submit'] == 'Change Password') {
 	$extension = basename($_FILES['new_pic']['name']);
 	$sub_ex = explode(".", $extension); 
 	$extension = strtolower($sub_ex[sizeof($sub_ex) - 1]);
-	$target_path = "/pics/$game_name/$row[0]_$row[1].$extension";
+	$target_path = "pics/$game_name/$row[0]_$row[1].$extension";
 	print "<table width=100% height=100%><tr><td align=center valign=center>";
 	if(($extension == 'jpg') || ($extension == 'jpeg') || ($extension == 'gif')) {
 		if(move_uploaded_file($_FILES['new_pic']['tmp_name'], $target_path)) {
-			$ret = mysql_query("UPDATE $table_u SET pic_path = '$target_path' WHERE id='$id';");
+			$ret = mysql_query("UPDATE $table_u SET pic_path = '/$target_path' WHERE id='$id';");
 			print "Picture successfully uploaded.<br>"; 
 			print "<a href='account.php'>Back</a>";
 		} else {
