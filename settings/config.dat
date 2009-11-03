@@ -33,3 +33,8 @@ admin_login_goto = index.php
 #
 reg_admin = YourAdminRegistrationPassword
 id_length = 6
+
+#
+# Pagination records
+#
+page_records=30
