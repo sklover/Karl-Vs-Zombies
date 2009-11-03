@@ -65,6 +65,7 @@ if($_POST['mode'] == 'refresh') {
 	$show_killed = 0;
 	$show_feed = 1; 
 	$show_starved = 0;
+	$page = 1;
 }
 
 include('template_top.php'); ?>
