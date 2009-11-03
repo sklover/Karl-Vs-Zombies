@@ -224,14 +224,8 @@ if($ret && ($rows = mysql_num_rows($ret)) > 0)
 <center>
 <? if($count_ret) include('pagination.php'); ?>
 </center>
+<? if($count_ret) include('pagination.php'); ?>
+ 
 </form>
-	</td>
-       
-      </tr>
-    </table>
-<?php
-include('template_top.php');
-mysql_free_result($ret);
-mysql_close($sql);
-ob_end_flush();
-?>
+ 
+<?php include('template_bottom.php'); ?>

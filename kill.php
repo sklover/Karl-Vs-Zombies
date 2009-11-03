@@ -259,8 +259,3 @@ while($row = mysql_fetch_array($ret))
 
 
 <?php include('template_bottom.php'); ?>
-}
-mysql_free_result($ret);
-mysql_close($sql); 
-ob_end_flush();
-?>
