@@ -22,7 +22,7 @@ $state_translate = array('-3'=>'horde', '-2'=>'horde (original)', '-1'=>'horde',
 $admin = 0;
 if(isset($_SESSION['pass_hash'])) $admin = 1;
 
-if($_POST['submit'] == 'Refresh') {
+if($_POST['submit'] == 'refresh') {
 	$post_faction_array = array('a'=>'1 = 1', 'r'=>'state > 0', 'h'=>'state < 0', 'd'=>'state = 0'); 
 	if(!$reveal_oz) { 
 		$post_faction_array['r'] = 'state > 0 OR state = -2';
@@ -44,7 +44,7 @@ if($_POST['submit'] == 'Refresh') {
 	$show_feed = $_POST['show_feed']; 
 	$show_starved = $_POST['show_starved']; 
 } else {
-        $faction = '1 = 1';
+        $faction = '';
 	$sort_by = 'lname';
 	$order = 'ASC'; 
 	$show_pics = 1;
@@ -229,7 +229,8 @@ else {
 
 
 <h3>Player List</h3>
-<form method=POST action=<?php echo $PHP_SELF; ?>>
+<form name="playerListForm" action="players.php" method="post">
+<input type="hidden" name="mode" value="refresh" />
 <center>
 <?php
 
@@ -257,14 +258,41 @@ while(list($k,$v) = each($order_array)) {
 print "</select>";
 
 ?>
-<input type='submit' name='submit' value='Refresh'><br>
+<input type='submit' name='submit'><br>
+<input type="hidden" name="faction_orig" value="<?php print (isset($_POST['faction'])) ? $_POST['faction'] : 'a'; ?>" />
+<input type="hidden" name="sort_by_orig" value="<?php print (isset($_POST['sort_by'])) ? $_POST['sort_by'] : 'ln'; ?>" />
+<input type="hidden" name="order_orig" value="<?php print (isset($_POST['order'])) ? $_POST['order'] : 'a'; ?>" />
 <input type='checkbox' name='show_pics' value='1' <?php if($show_pics) print "checked"; ?>> Pictures
 <input type='checkbox' name='show_kills' value='1' <?php if($show_kills) print "checked"; ?>> Kills
 <input type='checkbox' name='show_killed' value='1' <?php if($show_killed) print "checked"; ?>> Time Killed
 <input type='checkbox' name='show_feed' value='1' <?php if($show_feed) print "checked"; ?>> Last Fed
 <input type='checkbox' name='show_starved' value='1' <?php if($show_starved) print "checked"; ?>> Time Starved
 </center>
-<table width=100% border>
+<br /><br />
+<?php
+// prepare the pagination values
+$records = $config['page_records'];
+$start = ($page - 1) * $records;
+$limit = " LIMIT ".$start.", ".$records;
+
+// player query
+$player_query = "SELECT * FROM $table_u $faction ORDER BY $sort_by $order";
+$ret = mysql_query($player_query.$limit);
+
+// count query
+$count_query = "SELECT COUNT(user_id) AS count FROM $table_u $faction ORDER BY $sort_by $order";
+$count_ret = mysql_query($count_query);
+$count = mysql_fetch_assoc($count_ret);
+$count = $count['count'];
+
+// get the total page count
+$pages = ceil($count / $config['page_records']);
+?>
+<input type="hidden" name="page" value="<?php print $page; ?>" />
+
+<? if($count_ret) include('pagination.php'); ?>
+
+<table width="100%" cellspacing="0" class="data-table">
 <tr>
 <?php
 if($show_pics) print "<td>picture</td>";
@@ -281,68 +309,80 @@ if($admin) print "<td></td>";
 </tr>
 
 <?php
-$ret = mysql_query("SELECT fname, lname, state, killed_by, killed, feed, kills, starved, pic_path, id FROM $table_u WHERE $faction ORDER BY $sort_by $order;"); 
-for($i = 0; $i < mysql_num_rows($ret); $i++) {
-	
-	$row = mysql_fetch_array($ret);
-	if($show_pics) {
-		print "<td>";
-		if(strlen($row[8]) > 0) {
-			print "<center><img src='$row[8]' height=200></center>";
+// display the records
+if($ret && ($rows = mysql_num_rows($ret)) > 0)
+{
+	for($i = 0; $i < $rows; $i++) {
+		$row_id = ($i % 2) + 1;
+		print '<tr class="row'.$row_id.'">';
+		
+		$row = mysql_fetch_assoc($ret);
+		
+		if($show_pics) {
+			print '<td align="center">';
+			if(strlen($row['pic_path']) > 0) {
+				print '<img src="'.$row['pic_path'].'" class="player-pic '.$state_translate[$row['state']].'-pic">';
+			} else {
+				print "no image<br>available";
+			}
+			print "</td>";
+		}
+		
+		print '<td align="center">'.$row['fname'].' '.$row['lname'].'</td>';
+		
+		print '<td align="center">';
+		if($row['state'] == -2 && !$reveal_oz) {
+			print '<span class="resistance">resistance</span>';
 		} else {
-			print "<center>no image<br>available</center>";
+			print '<span class="'.$state_translate[$row['state']].'">'.$state_translate[$row['state']].'</span>';
 		}
 		print "</td>";
-	}
-	print "<td>$row[0] $row[1]</td><td>";
-	if($row[2] == -2 && !$reveal_oz) {
-		print "resistance";
-	} else {
-		print $state_translate[$row[2]];
-	}
-	if($show_kills) {
-		print "<td>";
-		if($row[2] == -2 && !$reveal_oz) {
-			print "0";
-		} else {
-			print "$row[6]";
+		
+		if($show_kills) {
+			print '<td align="center">';
+			if($row['state'] == -2 && !$reveal_oz) {
+				print "0";
+			} else {
+				print $row['kills'];
+			}
+			print "</td>";
 		}
-		print "</td>";
-	}
-	if($show_killed) {
-		print "<td>";
-		if($row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) {
-			print $row[4];
+		
+		if($show_killed) {
+			print '<td align="center">';
+			if($row['state'] <= 0 && ($row['state'] != -2 || $reveal_oz)) {
+				print $row['killed'];
+			}
+			print "</td>";
 		}
-		print "</td>";
+		
+		if($show_feed) {
+			print '<td align="center">';
+			if($row['state'] <= 0 && ($row['state'] != -2 || $reveal_oz)) { 
+				print $row['feed'];
+			}
+			print "</td>";
+		}
+		
+		if($show_starved) {
+			print '<td align="center">';
+			if($row['state'] == 0) { 
+				print $row['starved'];
+			}
+			print "</td>";
+		}
+		print "</tr>";
 	}
-	if($show_feed) {
-		print "<td>";
-		if($row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) { 
-                        print $row[5];
-                }
-		print "</td>";
-	}
-	if($show_starved) {
-		print "<td>";
-		if($row[2] == 0) { 
-                        print $row[7];
-                }
-		print "</td>";
-	}
-	print "</tr>";
-
+} else {
+	print '<tr><td colspan="7" align="center"> There are no records to display</td></tr>';
 }
 ?>
 
 
 </table>
-<center><i>
-<?php
-	$num = mysql_num_rows($ret); 
-	print "$num players listed";
-?>
-</i></center>
+<center>
+<? if($count_ret) include('pagination.php'); ?>
+</center>
 </form>
 	</td>
        
