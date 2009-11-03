@@ -10,7 +10,7 @@ if(!isset($_SESSION['content']['rules'])) {
 $sql = my_quick_con($config) or die("MySQL problem");
 $result = mysql_query("SELECT value FROM $config[content_table] WHERE keyword='rules'");
 $row = mysql_fetch_assoc($result);
-$_SESSION['content']['rules'] = $row['rules'];
+$_SESSION['content']['rules'] = $row['value'];
 }
  
 $rules = $_SESSION['content']['rules'];

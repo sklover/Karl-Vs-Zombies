@@ -23,9 +23,9 @@
 
 <center><img src="http://media.goucherzombies.com/hvzsource/Maverick.gif" alt="" width="200" height="125" /><br />
 <p align="center" class="style8 style2">
-HVZ Source code &copy;2008 and JJustin Quick.<br />
-Web design and logo &copy;2008 Max Temkin.<br />
-"Humans vs. Zombies" rules, logo &copy;2008 Chris Weed.</p>
+HVZ Source code &copy;2009 Karl Tata, Justin Quick, and Joe Sklover.<br />
+Web design and logo &copy;2009 Max Temkin.<br />
+"Humans vs. Zombies" rules, logo &copy;2009 Chris Weed.</p>
 <p align="center" class="style8 style2">
 HVZ SOURCE is a project created by Chris Weed (Paladin), <br>Joe Sklover (Ranger), Justin Quick (Sourcerer), Trevor Moorman (Rogue), <br>and Max Temkin (Wizard).</p>
 
