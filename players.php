@@ -10,14 +10,27 @@ $table_t = $config['time_table'];
 $sql = my_quick_con($config) or die("MySQL problem"); 
 // Set default time zone
 $ret = mysql_query("SELECT zone FROM $table_t");
-while($row = mysql_fetch_array($ret))
-	   date_default_timezone_set($row['zone']);
-$ret = mysql_query("UPDATE $table_u SET state = -4 WHERE now() > feed + INTERVAL 2 day;"); 
-$ret = mysql_query("UPDATE $table_u SET starved = feed + INTERVAL 2 day WHERE state = -4;");
-$ret = mysql_query("UPDATE $table_u SET state = 0 WHERE state = -4;");
-$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
-$reveal_oz = mysql_fetch_assoc($ret);
-$reveal_oz = $reveal_oz['value'];
+while($row = mysql_fetch_array($ret)){
+	date_default_timezone_set($row['zone']);
+}
+
+// update the starvation times and oz reveal (every 5 minutes, not on every page refresh)
+$now = time();
+$last_starvation_update = (isset($_SESSION['last_starvation_update'])) ? $_SESSION['last_starvation_update'] : $now;
+if($last_starvation_update >= $now + 900) {
+	$ret = mysql_query("UPDATE $table_u SET state = -4 WHERE now() > feed + INTERVAL 2 day;");
+	$ret = mysql_query("UPDATE $table_u SET starved = feed + INTERVAL 2 day WHERE state = -4;");
+	$ret = mysql_query("UPDATE $table_u SET state = 0 WHERE state = -4;");
+	$ret = mysql_query("SELECT value FROM $table_v WHERE keyword='oz-revealed';");
+	$reveal_oz = mysql_fetch_assoc($ret);
+	$reveal_oz = $reveal_oz['value'];
+	 
+	$_SESSION['last_starvation_update'] = time();
+	$_SESSION['oz_revealed'] = $reveal_oz;
+} else {
+	$reveal_oz = (isset($_SESSION['oz_revealed'])) ? $_SESSION['oz_revealed'] : 0;
+}
+
 $state_translate = array('-3'=>'horde', '-2'=>'horde (original)', '-1'=>'horde', '0'=>'deceased', '1'=>'resistance', '2'=>'resistance');
 $admin = 0;
 if(isset($_SESSION['pass_hash'])) $admin = 1;
