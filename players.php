@@ -35,7 +35,7 @@ $state_translate = array('-3'=>'horde', '-2'=>'horde (original)', '-1'=>'horde',
 $admin = 0;
 if(isset($_SESSION['pass_hash'])) $admin = 1;
 
-if($_POST['submit'] == 'refresh') {
+if($_POST['mode'] == 'refresh') {
 	$post_faction_array = array('a'=>'1 = 1', 'r'=>'state > 0', 'h'=>'state < 0', 'd'=>'state = 0'); 
 	if(!$reveal_oz) { 
 		$post_faction_array['r'] = 'state > 0 OR state = -2';
@@ -99,7 +99,7 @@ while(list($k,$v) = each($order_array)) {
 print "</select>";
 
 ?>
-<input type='submit' name='submit'><br>
+<input type='submit' value="Submit"><br>
 <input type="hidden" name="faction_orig" value="<?php print (isset($_POST['faction'])) ? $_POST['faction'] : 'a'; ?>" />
 <input type="hidden" name="sort_by_orig" value="<?php print (isset($_POST['sort_by'])) ? $_POST['sort_by'] : 'ln'; ?>" />
 <input type="hidden" name="order_orig" value="<?php print (isset($_POST['order'])) ? $_POST['order'] : 'a'; ?>" />

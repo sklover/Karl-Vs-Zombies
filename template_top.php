@@ -5,7 +5,7 @@
 	<title>Humans vs. Zombies :: Source</title>
 	<link rel="stylesheet" type="text/css" href="style/styles.css" />
 	
-	<script type="text/javascript" src="/gotos.js"></script>
+	<script type="text/javascript" src="/js/gotos.js"></script>
 	
 </head>
 

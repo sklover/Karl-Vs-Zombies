@@ -1,12 +1,12 @@
 function goTo(page) {
-	var f = document.playerListForm;
+	var f = document.getElementById('playerListForm');
 	f.page.value = page;
 	
 	f.submit();
 }
 
 function goToCheck(page) {
-	var f = document.playerListForm;
+	var f = document.getElementById('playerListForm');
 	
 	if(f.faction.options[f.faction.selectedIndex].value == f.faction_orig.value && 
 	   f.sort_by.options[f.sort_by.selectedIndex].value == f.sort_by_orig.value && 
