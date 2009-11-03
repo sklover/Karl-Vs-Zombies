@@ -10,7 +10,7 @@ if(!isset($_SESSION['content']['front'])) {
 $sql = my_quick_con($config) or die("MySQL problem");
 $result = mysql_query("SELECT value FROM $config[content_table] WHERE keyword='front'");
 $row = mysql_fetch_assoc($result);
-$_SESSION['content']['front'] = $row['front'];
+$_SESSION['content']['front'] = $row['value'];
 }
  
 $front = $_SESSION['content']['front'];

@@ -121,7 +121,7 @@ $player_query = "SELECT * FROM $table_u $faction ORDER BY $sort_by $order";
 $ret = mysql_query($player_query.$limit);
 
 // count query
-$count_query = "SELECT COUNT(user_id) AS count FROM $table_u $faction ORDER BY $sort_by $order";
+$count_query = "SELECT COUNT(id) AS count FROM $table_u $faction ORDER BY $sort_by $order";
 $count_ret = mysql_query($count_query);
 $count = mysql_fetch_assoc($count_ret);
 $count = $count['count'];
@@ -224,14 +224,8 @@ if($ret && ($rows = mysql_num_rows($ret)) > 0)
 <center>
 <? if($count_ret) include('pagination.php'); ?>
 </center>
+<? if($count_ret) include('pagination.php'); ?>
+ 
 </form>
-	</td>
-       
-      </tr>
-    </table>
-<?php
-include('template_top.php');
-mysql_free_result($ret);
-mysql_close($sql);
-ob_end_flush();
-?>
+ 
+<?php include('template_bottom.php'); ?>

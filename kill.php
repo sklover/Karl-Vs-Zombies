@@ -254,13 +254,8 @@ echo "<br />";
 $ret = mysql_query("SELECT zone FROM $table_t");
 while($row = mysql_fetch_array($ret))
 	   echo "<b>Timezone: </b>" . ($row['zone']);
-?>
 
+include('template_bottom.php');
 
-
-<?php include('template_bottom.php'); ?>
 }
-mysql_free_result($ret);
-mysql_close($sql); 
-ob_end_flush();
 ?>
